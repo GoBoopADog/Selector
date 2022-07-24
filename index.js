@@ -57,9 +57,14 @@ client.on('interactionCreate', async (interaction) => {
     let num1 = options.getNumber('num1')
     let num2 = options.getNumber('num2')
 
-    interaction.reply({
-      content: `The sum is ${num1 + num2}`,
+    await interaction.deferReply({
       ephemeral: true
+    })
+
+    await new Promise(resolve => setTimeout(resolve, 5000))
+
+    interaction.editReply({
+      content: `The sum is ${num1 + num2}`,
     })
   }
 })
