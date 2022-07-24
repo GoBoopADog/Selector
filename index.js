@@ -1,6 +1,6 @@
 process.stdout.write("\u001b[3J\u001b[2J\u001b[1J"); console.clear();
 
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, ApplicationCommandOptionType } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const { token } = require('./config.json');
 
@@ -20,6 +20,25 @@ client.on('ready', () => {
     name: 'ping',
     description: 'Pong!',
   })
+
+  commands.create({
+    name: 'add',
+    description: 'Adds two numbers',
+    options: [
+      {
+        name: 'num1',
+        description: 'The first number',
+        required: true,
+        type: ApplicationCommandOptionType.Number
+      },
+      {
+        name: 'num2',
+        description: 'The second number',
+        required: true,
+        type: ApplicationCommandOptionType.Number
+      }
+    ]
+  })
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -30,6 +49,16 @@ client.on('interactionCreate', async (interaction) => {
   if (commandName == 'ping') {
     interaction.reply({
       content: 'Pong!',
+      ephemeral: true
+    })
+  }
+
+  if (commandName == 'add') {
+    let num1 = options.getNumber('num1')
+    let num2 = options.getNumber('num2')
+
+    interaction.reply({
+      content: `The sum is ${num1 + num2}`,
       ephemeral: true
     })
   }
